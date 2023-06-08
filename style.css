@@ -31,10 +31,20 @@ body {
 
 #location-header {
     margin-top: 50px;
-    margin-bottom: 150px;
-    font-size: 50px;
+    margin-bottom: 10px;
     align-self: center;
     justify-self: start;
+}
+
+#location-header > h1 {
+    font-size: 50px;
+    text-align: center;
+}
+
+#location-header > p {
+    margin-bottom: 50px;
+    text-align: center;
+    font-size: 30px;
 }
 
 #input-header {
@@ -44,6 +54,7 @@ body {
 }
 
 input {
+    text-align: center;
     height: 40px;
     width: 250px;
     align-self: center;
@@ -56,6 +67,7 @@ input {
     text-align: center;
     font-size: 14px;
 }
+
 
 #information-container {
     align-self: center;

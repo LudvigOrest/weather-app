@@ -1,7 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
-        <script link="main.js" defer></script>
+        <script src="main.js" defer></script>
     </head>
     <body>
         <container id="main-content">
@@ -10,11 +10,15 @@
                 <h1>Väderappen</h1>
             </div>
 
-            <h1 id="location-header">LOCATION</h1>
+            <container id="location-header">
+                <h1 id="location-h1">LOCATION</h1>
+                <p id="clock">2023-06-08 18:48</p>
+            </container>
+            
 
             <div id="input-container">
                 <h2 id="input-header">Skriv in en plats</h2>
-                <input type="text" placeholder="location...">
+                <input id="input-box" type="text" placeholder="location...">
             </div>
 
             <div id="information-container">
