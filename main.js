@@ -5,12 +5,17 @@ let weatherObject = {
     lon: 0,
     weather:"weather",
     timezone:"timezone",
+    pressure: 0,
+    humidity: 0,
+    wind: 0,
 };
 let loadTime = 100;
+
 
 //Main
 setInterval(update, 3000);
 setInterval(clock, 1000);
+
 
 //Funktioner
 function onResponseLatLon(data) {
@@ -24,6 +29,9 @@ function onResponse(data) {
     console.log(data);
     weatherObject.weather = data.weather[0].main;
     weatherObject.timezone = data.timezone;
+    weatherObject.pressure = data.main.pressure;
+    weatherObject.humidity = data.main.humidity;
+    weatherObject.wind = data.wind.speed;
 }
 
 function onResponseGetLat(data) {
@@ -67,6 +75,7 @@ function updateLocationTime() {
 }
 
 function clock() {
+    let offset = UTCOffset();
     let date = new Date();
     let hour = date.getHours();
     let minutes = date.getMinutes();
@@ -78,9 +87,27 @@ function clock() {
     let htmlClock = document.getElementById("clock");
     htmlClock.innerHTML = day + "/" + month + "/" + year + "  " + hour + ":" + minutes + ":" + sec;
 
-    
+    console.log(calculateUTC(28800));
     
 }
+
+function calculateUTC(utc) {
+    utc = Number(utc);
+    var h = Math.floor(utc / 3600);
+    var m = Math.floor(utc % 3600 / 60);
+    var s = Math.floor(utc % 3600 % 60);
+    return h + m + s; 
+}
+
+//Klientens UTC-tidsskillnad i timmar
+function UTCOffset() {
+    var offset = (new Date().getTimezoneOffset()/60) * -1;
+    console.log(offset);
+}
+
+// + 28800 sec BEIJING
+// + 7200 sec MALMÖ
+// UTC + 0 = current - malmö
 
 function update() {
     let input = getUserInput();
@@ -97,3 +124,11 @@ function update() {
     }
 }
 
+//Animations-funktioner
+function windyClouds() {
+    let main = document.getElementbyID("main-content");
+    let cloud = document.createElement("div");
+
+    cloud.classList.add("cloud");
+    main.appendChild(cloud);
+}
