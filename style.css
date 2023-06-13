@@ -42,9 +42,13 @@ body {
 }
 
 #location-header > p {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     text-align: center;
     font-size: 30px;
+}
+
+#weather-type {
+    font-size: 15px;
 }
 
 #input-header {
@@ -88,23 +92,24 @@ input {
 }
 
 .cloud {
+    opacity: 0%;
     position: absolute;
-    top: 200px;
-    right: 100px;
     background-color: white;
     width: 150px;
     height: 50px;
     border-radius: 30px;
-    animation-name: windy, fade-out;
-    animation-duration: 30s;
+    animation-name: windy;
+    animation-duration: 10s;
+}
+
+.windy {
+    animation-name: windy;
+    animation-duration: 1s;
 }
 
 @keyframes windy {
-    from {right:100px;}
-    to {right: 100%;}
-}
-
-@keyframes fade-out {
-    from {opacity: 1;}
-    to {opacity: 0;}
+    0% {opacity: 0%;}
+    30% {opacity: 50%;}
+    50% {opacity: 0%;}
+    100% {right: 80%;}
 }

@@ -16,6 +16,11 @@ let loadTime = 100;
 setInterval(update, 3000);
 setInterval(clock, 1000);
 
+//if-sats som läser av väder-objektets väder och väljer passande animation.
+animateClouds();
+setInterval(animateClouds, 5000);
+
+
 
 //Funktioner
 function onResponseLatLon(data) {
@@ -121,14 +126,47 @@ function update() {
         fetchWeather(weatherObject.lat, weatherObject.lon);
         console.log(weatherObject);
         setTimeout(updateLocationTime, loadTime);
+        setTimeout(updateBoxValues, 500);
     }
 }
 
-//Animations-funktioner
-function windyClouds() {
-    let main = document.getElementbyID("main-content");
-    let cloud = document.createElement("div");
+function updateBoxValues() {
+    let pressure = document.getElementById("pressure");
+    pressure.innerHTML = weatherObject.pressure + " mbar";
 
+    let humidity = document.getElementById("humidity");
+    humidity.innerHTML = weatherObject.humidity + " %";
+
+    let windSpeed = document.getElementById("wind-speed");
+    windSpeed.innerHTML = weatherObject.wind + " m/s"
+}
+
+function rng(min, max) {
+    return Math.floor((Math.random() * max) + min);
+}
+
+//Animations-funktioner
+function windyClouds(x, y) {
+    let main = document.getElementById("main-content")
+    let cloud = document.createElement("div");
+    cloud.style.right = x;
+    cloud.style.top = y;
     cloud.classList.add("cloud");
     main.appendChild(cloud);
+}
+
+function createClouds() {
+        let x = rng(0, 1200);
+        let y = rng(30, 600);
+        windyClouds(x, y);
+}
+
+function animateClouds() {
+
+    let cloudAmount = rng(4, 7);
+
+    for( let i = 0; i <= cloudAmount; i++) {
+        let delay = rng(0, 4000);
+        setTimeout(createClouds, delay);
+    }
 }
