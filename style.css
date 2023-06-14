@@ -10,7 +10,6 @@ body {
     justify-content: center;
     width: 100%;
     background-color: rgba(128, 128, 128, 0.164);
-    
 }
 
 #main-content {
@@ -112,4 +111,53 @@ input {
     30% {opacity: 50%;}
     50% {opacity: 0%;}
     100% {right: 80%;}
+}
+
+.sunny {
+    opacity: 1;
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: yellow;
+    top: 100px;
+    left: 100px;
+    border-radius: 100px;
+    animation: fade-in 2s, sunshine 5s infinite;
+    box-shadow: 10px 10px 10px rgb(248, 248, 143);
+}
+
+@keyframes sunshine {
+    0% {background-color: rgb(255, 255, 0);}
+    10% {background-color: rgb(247, 228, 15);}
+    20% {background-color: rgb(247, 233, 79);}
+    30% {background-color: rgb(216, 216, 5);}
+    40% {background-color: rgb(254, 241, 53);}
+    50% {background-color: rgb(255, 255, 60);}
+    60% {background-color: rgb(255, 255, 0);}
+    70% {background-color: rgb(247, 228, 15);}
+    80% {background-color: rgb(247, 233, 79); opacity: 1;}
+    90% {background-color: rgb(216, 216, 5);}
+    100% {background-color: rgb(254, 241, 53); opacity: 0.2;}
+}
+
+@keyframes fade-in {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+.rainy {
+    position: absolute;
+    position: absolute;
+    width: 20px;
+    height: 50px;
+    background-color: rgba(40, 220, 240, 0.452);
+    top: 100px;
+    right: 100px;
+    border-radius: 100px;
+    animation: fade-in 2s, rain 2s;
+}
+
+@keyframes rain {
+    from {}
+    to {top: 90%;}
 }

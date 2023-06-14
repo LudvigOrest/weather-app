@@ -3,7 +3,7 @@ let weatherObject = {
     location:"place",
     lat: 0,
     lon: 0,
-    weather:"weather",
+    weather:"Weather",
     timezone:"timezone",
     pressure: 0,
     humidity: 0,
@@ -15,12 +15,6 @@ let loadTime = 100;
 //Main
 setInterval(update, 3000);
 setInterval(clock, 1000);
-
-//if-sats som läser av väder-objektets väder och väljer passande animation.
-animateClouds();
-setInterval(animateClouds, 5000);
-
-
 
 //Funktioner
 function onResponseLatLon(data) {
@@ -128,6 +122,17 @@ function update() {
         setTimeout(updateLocationTime, loadTime);
         setTimeout(updateBoxValues, 500);
     }
+    if(weatherObject.weather == "Clear") {
+        setInterval(showHideSun, 5000);
+    }
+    if(weatherObject.weather == "Rain" || weatherObject.weather == "Snow") {
+        animateRain();
+        setInterval(animateRain, 5000);
+    }
+    if(weatherObject.weather == "Clouds" || weatherObject.weather == "Fog") {
+        animateClouds();
+        setInterval(animateClouds, 5000);
+    }
 }
 
 function updateBoxValues() {
@@ -138,7 +143,10 @@ function updateBoxValues() {
     humidity.innerHTML = weatherObject.humidity + " %";
 
     let windSpeed = document.getElementById("wind-speed");
-    windSpeed.innerHTML = weatherObject.wind + " m/s"
+    windSpeed.innerHTML = weatherObject.wind + " m/s";
+
+    let weatherType = document.getElementById("weather-type");
+    weatherType.innerHTML = weatherObject.weather;
 }
 
 function rng(min, max) {
@@ -153,6 +161,9 @@ function windyClouds(x, y) {
     cloud.style.top = y;
     cloud.classList.add("cloud");
     main.appendChild(cloud);
+    setTimeout(()=> {
+        cloud.remove();
+    }, 5000)
 }
 
 function createClouds() {
@@ -163,10 +174,53 @@ function createClouds() {
 
 function animateClouds() {
 
-    let cloudAmount = rng(4, 7);
+    if (weatherObject.weather == "Clouds") {
+        let cloudAmount = rng(4, 7);
 
-    for( let i = 0; i <= cloudAmount; i++) {
-        let delay = rng(0, 4000);
-        setTimeout(createClouds, delay);
+        for( let i = 0; i <= cloudAmount; i++) {
+            let delay = rng(0, 4000);
+            setTimeout(createClouds, delay);
+        }
     }
+}
+
+function showHideSun() {
+
+    if (weatherObject.weather == "Clear") {
+        let main = document.getElementById("main-content");
+        let sun = document.createElement("div");
+        sun.classList.add("sunny");
+        main.appendChild(sun);
+        setTimeout(()=> {
+            sun.remove();
+        }, 5000)
+    }
+}
+
+function createRainDiv(x, y) {
+    let main = document.getElementById("main-content");
+    let rain = document.createElement("div");
+    rain.style.right = x;
+    rain.style.top = y;
+    rain.classList.add("rainy");
+    main.appendChild(rain);
+    setTimeout(()=> {
+        rain.remove();
+    }, 1000)
+}
+
+function animateRain() {
+
+    if (weatherObject.weather == "Rain") {
+        let rainAmount = rng(7, 10);
+
+        for( let i = 0; i <= rainAmount; i++) {
+            let delay = rng(0, 3000);
+            setTimeout(() => {
+                let x = rng(0, 1700);
+                let y = rng(50, 70);
+                createRainDiv(x, y);
+            }, delay);
+        }
+    } 
 }
