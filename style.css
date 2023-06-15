@@ -92,6 +92,7 @@ input {
 
 .cloud {
     opacity: 0%;
+    z-index: -1;
     position: absolute;
     background-color: white;
     width: 150px;
@@ -148,6 +149,7 @@ input {
 .rainy {
     position: absolute;
     position: absolute;
+    z-index: -1;
     width: 20px;
     height: 50px;
     background-color: rgba(40, 220, 240, 0.452);

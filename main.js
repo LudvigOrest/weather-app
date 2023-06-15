@@ -1,4 +1,4 @@
-//Objekt
+//Väderbjekt att spara fetch-värden i
 let weatherObject = {
     location:"place",
     lat: 0,
@@ -11,15 +11,19 @@ let weatherObject = {
     temperature: 0,
     timezone: 0,
 };
-let loadTime = 1500;
 
-document.getElementById("input-box").addEventListener("blur", function() {
-    update();
-    setTimeout(update, loadTime);
-  });
+let loadTime = 2000;
+
 
 //Main
-//setInterval(update, 3000);
+function pressEnter(event) {
+    if (event.keyCode == 13) {
+        update();
+        setTimeout(update, loadTime);
+        //updatera värden vart 30:e minut
+        setInterval(update, 1800000);
+    }
+}
 setInterval(clock, 1000);
 
 
@@ -72,7 +76,6 @@ function fetchLocation(location) {
 function getUserInput() {
     let userInput =  document.getElementById("input-box");
     let userValue = userInput.value;
-    // console.log(userValue);
     return userValue;
 }
 
@@ -86,21 +89,17 @@ function clock() {
     let offset = CurrentUTCOffset();
     let date = new Date();
     let hour = date.getHours() + calculateUTC(weatherObject.timezone, offset);
-
-    if (hour > 23) {hour = hour-23;}
-    else if (hour < 0) {hour = hour+24;}
-
     let minutes = date.getMinutes();
     let sec = date.getSeconds();
     let month = date.getMonth() + 1;
     let day = date.getDate();
     let year = date.getFullYear();
 
+    if (hour > 23) {hour = hour-23; day + 1;}
+    else if (hour < 0) {hour = hour+24; day - 1;}
+
     let htmlClock = document.getElementById("clock");
     htmlClock.innerHTML = day + "/" + month + "/" + year + "  " + hour + ":" + minutes + ":" + sec;
-
-    console.log(calculateUTC(weatherObject.timezone, offset));
-    //alice springs och alla 0.5 utc funkar ej
 }
 
 function calculateUTC(locationOffset, currentOffset) {
@@ -113,7 +112,6 @@ function calculateUTC(locationOffset, currentOffset) {
 //Klientens UTC-tidsskillnad i timmar
 function CurrentUTCOffset() {
     let offset = (new Date().getTimezoneOffset()/60) * -1;
-    console.log(offset);
     return offset;
 }
 
@@ -151,6 +149,7 @@ function displayWeather() {
         animateClouds();
         setInterval(animateClouds, 4000);
     }
+    else {weatherObject.weather == "weather";}
 }
 
 function updateBoxValues() {
@@ -167,7 +166,7 @@ function updateBoxValues() {
     weatherType.innerHTML = weatherObject.weather;
 
     let temperature = document.getElementById("temperature");
-    temperature.innerHTML = weatherObject.temperature;
+    temperature.innerHTML = weatherObject.temperature + "°C";
 }
 
 function rng(min, max) {
@@ -196,10 +195,10 @@ function createClouds() {
 function animateClouds() {
 
     if (weatherObject.weather == "Clouds") {
-        let cloudAmount = rng(1, 3);
+        let cloudAmount = rng(0, 2);
 
         for( let i = 0; i <= cloudAmount; i++) {
-            let delay = rng(500, 5000);
+            let delay = rng(1000, 5000);
             setTimeout(createClouds, delay);
         }
     }
