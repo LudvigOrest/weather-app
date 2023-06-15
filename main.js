@@ -3,7 +3,7 @@ let weatherObject = {
     location:"place",
     lat: 0,
     lon: 0,
-    weather:"Weather",
+    weather:"weather",
     timezone:"timezone",
     pressure: 0,
     humidity: 0,
@@ -166,7 +166,7 @@ function updateBoxValues() {
     weatherType.innerHTML = weatherObject.weather;
 
     let temperature = document.getElementById("temperature");
-    temperature.innerHTML = weatherObject.temperature + "°C";
+    temperature.innerHTML = weatherObject.temperature + " °C";
 }
 
 function rng(min, max) {
