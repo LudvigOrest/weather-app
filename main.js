@@ -8,13 +8,20 @@ let weatherObject = {
     pressure: 0,
     humidity: 0,
     wind: 0,
+    temperature: 0,
+    timezone: 0,
 };
-let loadTime = 100;
+let loadTime = 1500;
 
+document.getElementById("input-box").addEventListener("blur", function() {
+    update();
+    setTimeout(update, loadTime);
+  });
 
 //Main
-setInterval(update, 3000);
+//setInterval(update, 3000);
 setInterval(clock, 1000);
+
 
 //Funktioner
 function onResponseLatLon(data) {
@@ -31,6 +38,8 @@ function onResponse(data) {
     weatherObject.pressure = data.main.pressure;
     weatherObject.humidity = data.main.humidity;
     weatherObject.wind = data.wind.speed;
+    weatherObject.temperature = Math.floor(data.main.temp - 273.15);
+    weatherObject.timezone = data.timezone;
 }
 
 function onResponseGetLat(data) {
@@ -63,7 +72,7 @@ function fetchLocation(location) {
 function getUserInput() {
     let userInput =  document.getElementById("input-box");
     let userValue = userInput.value;
-    console.log(userValue);
+    // console.log(userValue);
     return userValue;
 }
 
@@ -74,9 +83,13 @@ function updateLocationTime() {
 }
 
 function clock() {
-    let offset = UTCOffset();
+    let offset = CurrentUTCOffset();
     let date = new Date();
-    let hour = date.getHours();
+    let hour = date.getHours() + calculateUTC(weatherObject.timezone, offset);
+
+    if (hour > 23) {hour = hour-23;}
+    else if (hour < 0) {hour = hour+24;}
+
     let minutes = date.getMinutes();
     let sec = date.getSeconds();
     let month = date.getMonth() + 1;
@@ -86,22 +99,22 @@ function clock() {
     let htmlClock = document.getElementById("clock");
     htmlClock.innerHTML = day + "/" + month + "/" + year + "  " + hour + ":" + minutes + ":" + sec;
 
-    console.log(calculateUTC(28800));
-    
+    console.log(calculateUTC(weatherObject.timezone, offset));
+    //alice springs och alla 0.5 utc funkar ej
 }
 
-function calculateUTC(utc) {
-    utc = Number(utc);
-    var h = Math.floor(utc / 3600);
-    var m = Math.floor(utc % 3600 / 60);
-    var s = Math.floor(utc % 3600 % 60);
-    return h + m + s; 
+function calculateUTC(locationOffset, currentOffset) {
+    utc = Number(locationOffset);
+    let h = (locationOffset / 3600);
+    let newOffset = h - currentOffset;
+    return newOffset; 
 }
 
 //Klientens UTC-tidsskillnad i timmar
-function UTCOffset() {
-    var offset = (new Date().getTimezoneOffset()/60) * -1;
+function CurrentUTCOffset() {
+    let offset = (new Date().getTimezoneOffset()/60) * -1;
     console.log(offset);
+    return offset;
 }
 
 // + 28800 sec BEIJING
@@ -120,18 +133,23 @@ function update() {
         fetchWeather(weatherObject.lat, weatherObject.lon);
         console.log(weatherObject);
         setTimeout(updateLocationTime, loadTime);
-        setTimeout(updateBoxValues, 500);
+        setTimeout(updateBoxValues, loadTime);
     }
+    setTimeout(displayWeather, loadTime);
+}
+
+function displayWeather() {
     if(weatherObject.weather == "Clear") {
-        setInterval(showHideSun, 5000);
+        showHideSun();
+        setInterval(showHideSun, 3000);
     }
     if(weatherObject.weather == "Rain" || weatherObject.weather == "Snow") {
         animateRain();
-        setInterval(animateRain, 5000);
+        setInterval(animateRain, 4000);
     }
     if(weatherObject.weather == "Clouds" || weatherObject.weather == "Fog") {
         animateClouds();
-        setInterval(animateClouds, 5000);
+        setInterval(animateClouds, 4000);
     }
 }
 
@@ -147,6 +165,9 @@ function updateBoxValues() {
 
     let weatherType = document.getElementById("weather-type");
     weatherType.innerHTML = weatherObject.weather;
+
+    let temperature = document.getElementById("temperature");
+    temperature.innerHTML = weatherObject.temperature;
 }
 
 function rng(min, max) {
@@ -163,7 +184,7 @@ function windyClouds(x, y) {
     main.appendChild(cloud);
     setTimeout(()=> {
         cloud.remove();
-    }, 5000)
+    }, 4000)
 }
 
 function createClouds() {
@@ -175,10 +196,10 @@ function createClouds() {
 function animateClouds() {
 
     if (weatherObject.weather == "Clouds") {
-        let cloudAmount = rng(4, 7);
+        let cloudAmount = rng(1, 3);
 
         for( let i = 0; i <= cloudAmount; i++) {
-            let delay = rng(0, 4000);
+            let delay = rng(500, 5000);
             setTimeout(createClouds, delay);
         }
     }
