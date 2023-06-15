@@ -12,7 +12,7 @@ let weatherObject = {
     timezone: 0,
 };
 
-let loadTime = 2000;
+let loadTime = 800;
 
 
 //Main
